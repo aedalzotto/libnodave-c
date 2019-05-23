@@ -11,7 +11,38 @@ Exchange data with Siemens PLCs using MPI,PPI adapters or Ethernet with CPx43 or
 
 ## Getting Started
 
-TODO
+Here are the instructions to compile, install and add libnodave to your project.
+
+### Compiling
+
+This will compile the shared libraries for both x86-64 and x86.
+```
+make dist
+```
+
+### Installing
+
+This will install to /usr/local/libnodave-$(VERSION)/
+```
+sudo make install
+```
+
+### Adding to you project
+
+First of all, add the libnodave folder, the include path and library path to your env. Remember to replace the $(VERSION) with the appropriate version string. It is recommended to add the following lines to ~/.bashrc or ~/.zshrc.
+```
+export LIBNODAVE=/usr/local/libnodave-$(VERSION)
+export CPATH=$CPATH:$LIBNODAVE/include
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBNODAVE/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBNODAVE/lib32
+export LIBRARY_PATH=$LIBRARY_PATH:$LIBNODAVE/lib32
+export LIBRARY_PATH=$LIBRARY_PATH:$LIBNODAVE/lib
+```
+
+To compile your project with libnodave, remember to define the operating system in the CFLAGS and link the library. Example:
+```
+gcc test.c -DLINUX -lnodave
+```
 
 ## Authors
 
