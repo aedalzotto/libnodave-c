@@ -1,4 +1,4 @@
-VERSION = 0.8.5
+VERSION = 0.8.5.1
 TARGET = libnodave.so
 
 CC = gcc
