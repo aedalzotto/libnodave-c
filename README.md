@@ -29,7 +29,15 @@ sudo make install
 
 ### Adding to you project
 
-First of all, add the libnodave folder, the include path and library path to your env. Remember to replace the $(VERSION) with the appropriate version string. It is recommended to add the following lines to ~/.bashrc or ~/.zshrc.
+First of all, add the libnodave folder, the include path and library path to your env. Remember to replace the $(VERSION) with the appropriate version string. It is recommended to add the following lines to ~/.bashrc or ~/.zshrc. You can do it by running
+```
+make zshrc
+```
+or
+```
+make bashrc
+```
+or even
 ```
 export LIBNODAVE=/usr/local/libnodave-$(VERSION)
 export CPATH=$CPATH:$LIBNODAVE/include

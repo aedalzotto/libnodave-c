@@ -54,6 +54,24 @@ install:
 	@echo "Installing..."
 	@$(CP) -r $(DISTDIR) /usr/local/
 
+zshrc:
+	@echo "Exporting env vars..."
+	@echo -e "\nexport LIBNODAVE=/usr/local/libnodave-$(VERSION)" >> ~/.zshrc
+	@echo "export CPATH=$$CPATH:\$$LIBNODAVE/include" >> ~/.zshrc
+	@echo "export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:\$$LIBNODAVE/lib" >> ~/.zshrc
+	@echo "export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:\$$LIBNODAVE/lib32" >> ~/.zshrc
+	@echo "export LIBRARY_PATH=$$LIBRARY_PATH:\$$LIBNODAVE/lib32" >> ~/.zshrc
+	@echo "export LIBRARY_PATH=$$LIBRARY_PATH:\$$LIBNODAVE/lib" >> ~/.zshrc
+
+bashrc:
+	@echo "Exporting env vars..."
+	@echo -e "\nexport LIBNODAVE=/usr/local/libnodave-$(VERSION)" >> ~/.bashrc
+	@echo "export CPATH=$$CPATH:\$$LIBNODAVE/include" >> ~/.bashrc
+	@echo "export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:\$$LIBNODAVE/lib" >> ~/.bashrc
+	@echo "export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:\$$LIBNODAVE/lib32" >> ~/.bashrc
+	@echo "export LIBRARY_PATH=$$LIBRARY_PATH:\$$LIBNODAVE/lib32" >> ~/.bashrc
+	@echo "export LIBRARY_PATH=$$LIBRARY_PATH:\$$LIBNODAVE/lib" >> ~/.bashrc
+
 clean:
 	@echo "Cleaning..."
 	@$(RM) -rf $(TMP64) $(TMP32) $(DISTDIR)
