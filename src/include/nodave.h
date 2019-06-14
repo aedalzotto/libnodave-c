@@ -139,7 +139,7 @@ typedef struct dost {
 
 #define daveProtoNLpro 230	/* MPI with NetLink Pro MPI to ethernet gateway */
 
-#define daveProtoUserTransport 255	/* Libnodave will pass the PDUs of S7 Communication to user */
+#define daveProtoUserTransport 255	/* Libnodave will pass the PDunsigned short of S7 Communication to user */
 					/* defined call back functions. */
 
 /*
@@ -151,7 +151,7 @@ typedef struct dost {
 #define daveS7BasicCommunication 3	/* communication with another CPU ? */
 
 /*
- *    ProfiBus speed constants:
+ *    ProfiBunsigned short speed constants:
 */
 #define daveSpeed9k     0
 #define daveSpeed19k    1
@@ -235,7 +235,7 @@ typedef struct dost {
 #define daveResItemNotAvailable 10		/* means a a piece of data is not available in the CPU, e.g. */
 						/* when trying to read a non existing DB */
 
-#define daveAddressOutOfRange 5			/* means the data address is beyond the CPUs address range */
+#define daveAddressOutOfRange 5			/* means the data address is beyond the CPunsigned short address range */
 #define daveWriteDataSizeMismatch 7		/* means the write data size doesn't fit item size */
 #define daveResCannotEvaluatePDU -123    	/* PDU is not understood by libnodave */
 #define daveResCPUNoData -124 
@@ -325,13 +325,6 @@ EXPORTSPEC void DECL2 daveStringCopy(char * intString, char * extString); // arg
 */
 EXPORTSPEC void DECL2 daveSetDebug(int nDebug);
 EXPORTSPEC int DECL2 daveGetDebug(void);
-/*
-    Some data types:
-*/
-#define uc unsigned char
-#define us unsigned short
-#define u32 unsigned int
-
 /* 
     This is a wrapper for the serial or ethernet interface. This is here to make porting easier.
 */
@@ -344,10 +337,10 @@ typedef struct _daveInterface  daveInterface;
     a set of pointers that ease access to the "private parts" of a PDU.
 */
 typedef struct {
-    uc * header;	/* pointer to start of PDU (PDU header) */
-    uc * param;		/* pointer to start of parameters inside PDU */
-    uc * data;		/* pointer to start of data inside PDU */
-    uc * udata;		/* pointer to start of data inside PDU */
+    unsigned char * header;	/* pointer to start of PDU (PDU header) */
+    unsigned char * param;		/* pointer to start of parameters inside PDU */
+    unsigned char * data;		/* pointer to start of data inside PDU */
+    unsigned char * udata;		/* pointer to start of data inside PDU */
     int hlen;		/* header length */
     int plen;		/* parameter length */
     int dlen;		/* data length */
@@ -365,7 +358,7 @@ typedef int (DECL2 * _disconnectAdapterFunc) (daveInterface * );
 typedef int (DECL2 * _exchangeFunc) (daveConnection *, PDU *);
 typedef int (DECL2 * _sendMessageFunc) (daveConnection *, PDU *);
 typedef int (DECL2 * _getResponseFunc) (daveConnection *);
-typedef int (DECL2 * _listReachablePartnersFunc) (daveInterface * di, char * buf); // changed to unsigned char because it is a copy of an uc buffer
+typedef int (DECL2 * _listReachablePartnersFunc) (daveInterface * di, char * buf); // changed to unsigned char because it is a copy of an unsigned char buffer
 
 /*
     Definitions of prototypes for i/O functions.
@@ -387,7 +380,7 @@ struct _daveInterface {
     char * name;	/* just a name that can be used in programs dealing with multiple */
 			/* daveInterfaces */
     int protocol;	/* The kind of transport protocol used on this interface. */
-    int speed;		/* The MPI or Profibus speed */
+    int speed;		/* The MPI or Profibunsigned short speed */
     int ackPos;		/* position of some packet number that has to be repeated in ackknowledges */
     int nextConnection;
     _initAdapterFunc initAdapter;		/* pointers to the protocol */
@@ -410,12 +403,12 @@ EXPORTSPEC daveInterface * DECL2 davePascalNewInterface(_daveOSserialType* nfd, 
     This is the packet header used by IBH ethernet NetLink. 
 */
 typedef struct {
-    uc ch1;	// logical connection or channel ?
-    uc ch2;	// logical connection or channel ?
-    uc len;	// number of bytes counted from the ninth one.
-    uc packetNumber;	// a counter, response packets refer to request packets
-    us sFlags;		// my guess
-    us rFlags;		// my interpretation
+    unsigned char ch1;	// logical connection or channel ?
+    unsigned char ch2;	// logical connection or channel ?
+    unsigned char len;	// number of bytes counted from the ninth one.
+    unsigned char packetNumber;	// a counter, response packets refer to request packets
+    unsigned short sFlags;		// my guess
+    unsigned short rFlags;		// my interpretation
 } IBHpacket;
 
 /*
@@ -423,25 +416,25 @@ typedef struct {
 */
 
 typedef struct {
-    uc src_conn;
-    uc dst_conn;
-    uc MPI;
-    uc localMPI;
-    uc len;
-    uc func;
-    uc packetNumber;
+    unsigned char src_conn;
+    unsigned char dst_conn;
+    unsigned char MPI;
+    unsigned char localMPI;
+    unsigned char len;
+    unsigned char func;
+    unsigned char packetNumber;
 } MPIheader;
 
 typedef struct {
-    uc src_conn;
-    uc dst_conn;
-    uc MPI;
-    uc xxx1;
-    uc xxx2;
-    uc xx22;
-    uc len;
-    uc func;
-    uc packetNumber;
+    unsigned char src_conn;
+    unsigned char dst_conn;
+    unsigned char MPI;
+    unsigned char xxx1;
+    unsigned char xxx2;
+    unsigned char xx22;
+    unsigned char len;
+    unsigned char func;
+    unsigned char packetNumber;
 }  MPIheader2;
 
 typedef struct _daveS5AreaInfo  {
@@ -470,7 +463,7 @@ typedef struct _daveRoutingData {
 	int subnetID2;
 	int subnetID3;
 	int PLCadrsize;
-	uc  PLCadr[4];		// currently, IP is maximum. Maybe there could be MAC adresses for Industrial Ethernet?
+	unsigned char  PLCadr[4];		// currently, IP is maximum. Maybe there could be MAC adresses for Industrial Ethernet?
 } daveRoutingData;
 
 /*
@@ -478,7 +471,7 @@ typedef struct _daveRoutingData {
 */
 struct _daveConnection {
     int AnswLen;	/* length of last message */
-    uc * resultPointer;	/* used to retrieve single values from the result byte array */
+    unsigned char * resultPointer;	/* used to retrieve single values from the result byte array */
     int maxPDUlength;
     int MPIAdr;		/* The PLC's address */
     daveInterface * iface; /* pointer to used interface */
@@ -486,17 +479,17 @@ struct _daveConnection {
     int PDUnumber; 	/* current PDU number */
     int ibhSrcConn;
     int ibhDstConn;
-    uc msgIn[daveMaxRawLen];
-    uc msgOut[daveMaxRawLen];
-    uc * _resultPointer;
+    unsigned char msgIn[daveMaxRawLen];
+    unsigned char msgOut[daveMaxRawLen];
+    unsigned char * _resultPointer;
     int PDUstartO;	/* position of PDU in outgoing messages. This is different for different transport methodes. */
     int PDUstartI;	/* position of PDU in incoming messages. This is different for different transport methodes. */
     int rack;		/* rack number for ISO over TCP */
     int slot;		/* slot number for ISO over TCP */
     int connectionNumber;
     int connectionNumber2;
-    uc 	messageNumber;  /* current MPI message number */
-    uc	packetNumber;	/* packetNumber in transport layer */
+    unsigned char 	messageNumber;  /* current MPI message number */
+    unsigned char	packetNumber;	/* packetNumber in transport layer */
     void * hook;	/* used in CPU/CP simulation: pointer to the rest we have to send if message doesn't fit in a single packet */
     daveS5cache * cache; /* used in AS511: We cache addresses of memory areas and datablocks here */
     int TPDUsize; 		// size of TPDU for ISO over TCP
@@ -506,7 +499,7 @@ struct _daveConnection {
     daveRoutingData routingData;
 }; 
 
-EXPORTSPEC void DECL2 daveSetRoutingDestination(daveConnection * dc, int subnet1,int subnet3,int adrsize, uc* plcadr);
+EXPORTSPEC void DECL2 daveSetRoutingDestination(daveConnection * dc, int subnet1,int subnet3,int adrsize, unsigned char* plcadr);
 /* 
 	    void * Destination, 
 	    int DestinationIsIP, 
@@ -546,27 +539,27 @@ EXPORTSPEC daveConnection * DECL2 daveNewConnection(daveInterface * di, int MPI,
 
 
 typedef struct {
-    uc type[2];
+    unsigned char type[2];
     unsigned short count;
 } daveBlockTypeEntry;
 
 typedef struct {
     unsigned short number;
-    uc type[2];
+    unsigned char type[2];
 } daveBlockEntry;
 
 typedef struct {
-    uc type[2];
-    uc x1[2];  /* 00 4A */
-    uc w1[2];  /* some word var? */
+    unsigned char type[2];
+    unsigned char x1[2];  /* 00 4A */
+    unsigned char w1[2];  /* some word var? */
     char pp[2]; /* allways 'pp' */
-    uc x2[4];  /* 00 4A */
+    unsigned char x2[4];  /* 00 4A */
     unsigned short number; /* the block's number */
-    uc x3[26];  /* ? */
+    unsigned char x3[26];  /* ? */
     unsigned short length; /* the block's length */
-    uc x4[16];
-    uc name[8];
-    uc x5[12];
+    unsigned char x4[16];
+    unsigned char name[8];
+    unsigned char x5[12];
 } daveBlockInfo;
 /**
     PDU handling:
@@ -576,28 +569,28 @@ typedef struct {
     header followed by payload data
 **/
 typedef struct {
-    uc P;	/* allways 0x32 */
-    uc type;	/* Header type, one of 1,2,3 or 7. type 2 and 3 headers are two bytes longer. */
-    uc a,b;	/* currently unknown. Maybe it can be used for long numbers? */
-    us number;	/* A number. This can be used to make sure a received answer */
+    unsigned char P;	/* allways 0x32 */
+    unsigned char type;	/* Header type, one of 1,2,3 or 7. type 2 and 3 headers are two bytes longer. */
+    unsigned char a,b;	/* currently unknown. Maybe it can be used for long numbers? */
+    unsigned short number;	/* A number. This can be used to make sure a received answer */
 		/* corresponds to the request with the same number. */
-    us plen;	/* length of parameters which follow this header */
-    us dlen;	/* length of data which follow the parameters */
-    uc result[2]; /* only present in type 2 and 3 headers. This contains error information. */
+    unsigned short plen;	/* length of parameters which follow this header */
+    unsigned short dlen;	/* length of data which follow the parameters */
+    unsigned char result[2]; /* only present in type 2 and 3 headers. This contains error information. */
 } PDUHeader;
 
 /*
     same as above, but made up of single bytes only, so that every single byte can be adressed separately
 */
 typedef struct {
-    uc P;	/* allways 0x32 */
-    uc type;	/* Header type, one of 1,2,3 or 7. type 2 and 3 headers are two bytes longer. */
-    uc a,b;	/* currently unknown. Maybe it can be used for long numbers? */
-    uc numberHi,numberLo;	/* A number. This can be used to make sure a received answer */
+    unsigned char P;	/* allways 0x32 */
+    unsigned char type;	/* Header type, one of 1,2,3 or 7. type 2 and 3 headers are two bytes longer. */
+    unsigned char a,b;	/* currently unknown. Maybe it can be used for long numbers? */
+    unsigned char numberHi,numberLo;	/* A number. This can be used to make sure a received answer */
 		/* corresponds to the request with the same number. */
-    uc plenHi,plenLo;	/* length of parameters which follow this header */
-    uc dlenHi,dlenLo;	/* length of data which follow the parameters */
-    uc result[2]; /* only present in type 2 and 3 headers. This contains error information. */
+    unsigned char plenHi,plenLo;	/* length of parameters which follow this header */
+    unsigned char dlenHi,dlenLo;	/* length of data which follow the parameters */
+    unsigned char result[2]; /* only present in type 2 and 3 headers. This contains error information. */
 } PDUHeader2;
 /*
     set up the header. Needs valid header pointer in the struct p points to.
@@ -607,7 +600,7 @@ EXPORTSPEC void DECL2 _daveInitPDUheader(PDU * p, int type);
     add parameters after header, adjust pointer to data.
     needs valid header
 */
-EXPORTSPEC void DECL2 _daveAddParam(PDU * p,uc * param,us len);
+EXPORTSPEC void DECL2 _daveAddParam(PDU * p,unsigned char * param,unsigned short len);
 /*
     add data after parameters, set dlen
     needs valid header,and valid parameters.
@@ -621,7 +614,7 @@ EXPORTSPEC void DECL2 _daveAddValue(PDU * p,void * data,int len);
 /*
     add data in user data. Add a user data header, if not yet present.
 */
-EXPORTSPEC void DECL2 _daveAddUserData(PDU * p, uc * da, int len);
+EXPORTSPEC void DECL2 _daveAddUserData(PDU * p, unsigned char * da, int len);
 /*
     set up pointers to the fields of a received message
 */
@@ -658,19 +651,19 @@ EXPORTSPEC void DECL2 _daveDumpPDU(PDU * p);
     in the sample data. A stop flag lets it return success, if there were no mismatches
     up to this point.
 */
-EXPORTSPEC int DECL2 _daveMemcmp(us * a, uc *b, size_t len);
+EXPORTSPEC int DECL2 _daveMemcmp(unsigned short * a, unsigned char *b, size_t len);
 
 /*
     Hex dump. Write the name followed by len bytes written in hex and a newline:
 */
-//EXPORTSPEC void DECL2 _daveDump(char * name, uc *b, int len);
+//EXPORTSPEC void DECL2 _daveDump(char * name, unsigned char *b, int len);
 EXPORTSPEC void DECL2 _daveDump(char * name, void *b, int len);
 
 /*
     names for PLC objects:
 */
-EXPORTSPEC char * DECL2 daveBlockName(uc bn);  // char or uc,to decide
-EXPORTSPEC char * DECL2 daveAreaName(uc n); // to decide
+EXPORTSPEC char * DECL2 daveBlockName(unsigned char bn);  // char or uc,to decide
+EXPORTSPEC char * DECL2 daveAreaName(unsigned char n); // to decide
 
 /*
     swap functions. These swap function do a swao on little endian machines only:
@@ -698,14 +691,14 @@ EXPORTSPEC int DECL2 daveToPLCfloat(float ff);
 EXPORTSPEC int DECL2 daveToKG(float ff);
 
 
-EXPORTSPEC int DECL2 daveGetS8from(uc *b);
-EXPORTSPEC int DECL2 daveGetU8from(uc *b);
-EXPORTSPEC int DECL2 daveGetS16from(uc *b);
-EXPORTSPEC int DECL2 daveGetU16from(uc *b);
-EXPORTSPEC int DECL2 daveGetS32from(uc *b);
-EXPORTSPEC unsigned int DECL2 daveGetU32from(uc *b);
-EXPORTSPEC float DECL2 daveGetFloatfrom(uc *b);
-EXPORTSPEC float DECL2 daveGetKGfrom(uc *b);
+EXPORTSPEC int DECL2 daveGetS8from(unsigned char *b);
+EXPORTSPEC int DECL2 daveGetU8from(unsigned char *b);
+EXPORTSPEC int DECL2 daveGetS16from(unsigned char *b);
+EXPORTSPEC int DECL2 daveGetU16from(unsigned char *b);
+EXPORTSPEC int DECL2 daveGetS32from(unsigned char *b);
+EXPORTSPEC unsigned int DECL2 daveGetU32from(unsigned char *b);
+EXPORTSPEC float DECL2 daveGetFloatfrom(unsigned char *b);
+EXPORTSPEC float DECL2 daveGetKGfrom(unsigned char *b);
 /*
     Get a value from the current position in the last result read on the connection dc.
     This will increment an internal pointer, so the next value is read from the position
@@ -732,16 +725,16 @@ EXPORTSPEC unsigned int DECL2 daveGetU32At(daveConnection * dc, int pos);
 /*
     put one byte into buffer b:
 */
-EXPORTSPEC uc * DECL2 davePut8(uc *b,int v);
-EXPORTSPEC uc * DECL2 davePut16(uc *b,int v);
-EXPORTSPEC uc * DECL2 davePut32(uc *b,int v);
-EXPORTSPEC uc * DECL2 davePutFloat(uc *b,float v);
-EXPORTSPEC uc * DECL2 davePutKG(uc *b,float v);
-EXPORTSPEC void DECL2 davePut8At(uc *b, int pos, int v);
-EXPORTSPEC void DECL2 davePut16At(uc *b, int pos, int v);
-EXPORTSPEC void DECL2 davePut32At(uc *b, int pos, int v);
-EXPORTSPEC void DECL2 davePutFloatAt(uc *b,int pos, float v);
-EXPORTSPEC void DECL2 davePutKGAt(uc *b,int pos, float v);
+EXPORTSPEC unsigned char * DECL2 davePut8(unsigned char *b,int v);
+EXPORTSPEC unsigned char * DECL2 davePut16(unsigned char *b,int v);
+EXPORTSPEC unsigned char * DECL2 davePut32(unsigned char *b,int v);
+EXPORTSPEC unsigned char * DECL2 davePutFloat(unsigned char *b,float v);
+EXPORTSPEC unsigned char * DECL2 davePutKG(unsigned char *b,float v);
+EXPORTSPEC void DECL2 davePut8At(unsigned char *b, int pos, int v);
+EXPORTSPEC void DECL2 davePut16At(unsigned char *b, int pos, int v);
+EXPORTSPEC void DECL2 davePut32At(unsigned char *b, int pos, int v);
+EXPORTSPEC void DECL2 davePutFloatAt(unsigned char *b,int pos, float v);
+EXPORTSPEC void DECL2 davePutKGAt(unsigned char *b,int pos, float v);
 /**
     Timer and Counter conversion functions:
 **/
@@ -859,16 +852,16 @@ EXPORTSPEC int DECL2 daveClrBit(daveConnection * dc,int area, int DB, int byteAd
 /*
     PLC diagnostic and inventory functions:
 */
-EXPORTSPEC int DECL2 daveBuildAndSendPDU(daveConnection * dc, PDU*p2,uc *pa,int psize, uc *ud,int usize);
+EXPORTSPEC int DECL2 daveBuildAndSendPDU(daveConnection * dc, PDU*p2,unsigned char *pa,int psize, unsigned char *ud,int usize);
 EXPORTSPEC int DECL2 daveReadSZL(daveConnection * dc, int ID, int index, void * buf, int buflen);
-EXPORTSPEC int DECL2 daveListBlocksOfType(daveConnection * dc,uc type,daveBlockEntry * buf);
+EXPORTSPEC int DECL2 daveListBlocksOfType(daveConnection * dc,unsigned char type,daveBlockEntry * buf);
 EXPORTSPEC int DECL2 daveListBlocks(daveConnection * dc,daveBlockTypeEntry * buf);
-EXPORTSPEC int DECL2 daveGetBlockInfo(daveConnection * dc, daveBlockInfo *dbi, uc type, int number);
+EXPORTSPEC int DECL2 daveGetBlockInfo(daveConnection * dc, daveBlockInfo *dbi, unsigned char type, int number);
 /*
     PLC program read functions:
 */
 EXPORTSPEC int DECL2 initUpload(daveConnection * dc, char blockType, int blockNr, int * uploadID); // char or uc,to decide
-EXPORTSPEC int DECL2 doUpload(daveConnection*dc, int * more, uc**buffer, int*len, int uploadID);
+EXPORTSPEC int DECL2 doUpload(daveConnection*dc, int * more, unsigned char**buffer, int*len, int uploadID);
 EXPORTSPEC int DECL2 endUpload(daveConnection*dc, int uploadID);
 /*
     PLC run/stop control functions:
@@ -887,7 +880,7 @@ EXPORTSPEC int DECL2 daveForce200(daveConnection * dc, int area, int start, int 
 typedef struct {
     int error;
     int length;
-    uc * bytes;
+    unsigned char * bytes;
 } daveResult;
 
 typedef struct {
@@ -972,26 +965,26 @@ EXPORTSPEC int DECL2 _daveConnectPLCTCP(daveConnection * dc);
 EXPORTSPEC int DECL2 _daveExchangePPI(daveConnection * dc,PDU * p1);
 EXPORTSPEC void DECL2 _daveSendLength(daveInterface * di, int len);
 EXPORTSPEC void DECL2 _daveSendRequestData(daveConnection * dc, int alt);
-EXPORTSPEC void DECL2 _daveSendIt(daveInterface * di, uc * b, int size);
+EXPORTSPEC void DECL2 _daveSendIt(daveInterface * di, unsigned char * b, int size);
 EXPORTSPEC int DECL2 _daveGetResponsePPI(daveConnection *dc);
-EXPORTSPEC int DECL2 _daveReadChars(daveInterface * di,	uc *b, tmotype tmo, int max);
-EXPORTSPEC int DECL2 _daveReadChars2(daveInterface * di,uc *b, int max);
+EXPORTSPEC int DECL2 _daveReadChars(daveInterface * di,	unsigned char *b, tmotype tmo, int max);
+EXPORTSPEC int DECL2 _daveReadChars2(daveInterface * di,unsigned char *b, int max);
 EXPORTSPEC int DECL2 _daveConnectPLCPPI(daveConnection * dc);
 
 /*
     make internal MPI functions available for experimental use:
 */
-EXPORTSPEC int DECL2 _daveReadMPI(daveInterface * di, uc *b);
-EXPORTSPEC void DECL2 _daveSendSingle(daveInterface * di, uc c);
+EXPORTSPEC int DECL2 _daveReadMPI(daveInterface * di, unsigned char *b);
+EXPORTSPEC void DECL2 _daveSendSingle(daveInterface * di, unsigned char c);
 EXPORTSPEC int DECL2 _daveSendAck(daveConnection * dc, int nr);
 EXPORTSPEC int DECL2 _daveGetAck(daveConnection * dc);
 EXPORTSPEC int DECL2 _daveSendDialog2(daveConnection * dc, int size);
-EXPORTSPEC int DECL2 _daveSendWithPrefix(daveConnection * dc, uc * b, int size);
+EXPORTSPEC int DECL2 _daveSendWithPrefix(daveConnection * dc, unsigned char * b, int size);
 EXPORTSPEC int DECL2 _daveSendWithPrefix2(daveConnection * dc, int size);
-EXPORTSPEC int DECL2 _daveSendWithCRC(daveInterface * di, uc *b, int size);
+EXPORTSPEC int DECL2 _daveSendWithCRC(daveInterface * di, unsigned char *b, int size);
 EXPORTSPEC int DECL2 _daveReadSingle(daveInterface * di);
-EXPORTSPEC int DECL2 _daveReadOne(daveInterface * di, uc *b);
-EXPORTSPEC int DECL2 _daveReadMPI2(daveInterface * di, uc *b);
+EXPORTSPEC int DECL2 _daveReadOne(daveInterface * di, unsigned char *b);
+EXPORTSPEC int DECL2 _daveReadMPI2(daveInterface * di, unsigned char *b);
 EXPORTSPEC int DECL2 _daveGetResponseMPI(daveConnection *dc);
 EXPORTSPEC int DECL2 _daveSendMessageMPI(daveConnection * dc, PDU * p);
 
@@ -1001,12 +994,12 @@ EXPORTSPEC int DECL2 _daveSendMessageMPI(daveConnection * dc, PDU * p);
 /*
     Read one complete packet. The bytes 3 and 4 contain length information.
 */
-EXPORTSPEC int DECL2 _daveReadISOPacket(daveInterface * di,uc *b);
+EXPORTSPEC int DECL2 _daveReadISOPacket(daveInterface * di,unsigned char *b);
 EXPORTSPEC int DECL2 _daveGetResponseISO_TCP(daveConnection *dc);
 
 
-typedef uc * (*userReadFunc) (int , int, int, int, int *);
-typedef void (*userWriteFunc) (int , int, int, int, int *,uc *);
+typedef unsigned char * (*userReadFunc) (int , int, int, int, int *);
+typedef void (*userWriteFunc) (int , int, int, int, int *,unsigned char *);
 extern userReadFunc readCallBack;
 extern userWriteFunc writeCallBack;
 
@@ -1018,8 +1011,8 @@ EXPORTSPEC void DECL2 _daveHandleWrite(PDU * p1,PDU * p2);
 /*
     make internal IBH functions available for experimental use:
 */
-EXPORTSPEC int DECL2 _daveReadIBHPacket(daveInterface * di,uc *b);
-EXPORTSPEC int DECL2 _daveWriteIBH(daveInterface * di, uc * buffer, int len);
+EXPORTSPEC int DECL2 _daveReadIBHPacket(daveInterface * di,unsigned char *b);
+EXPORTSPEC int DECL2 _daveWriteIBH(daveInterface * di, unsigned char * buffer, int len);
 EXPORTSPEC int DECL2 _davePackPDU(daveConnection * dc,PDU *p);
 EXPORTSPEC void DECL2 _daveSendMPIAck_IBH(daveConnection*dc);
 EXPORTSPEC void DECL2 _daveSendIBHNetAck(daveConnection * dc);
@@ -1027,7 +1020,7 @@ EXPORTSPEC int DECL2 __daveAnalyze(daveConnection * dc);
 EXPORTSPEC int DECL2 _daveExchangeIBH(daveConnection * dc, PDU * p);
 EXPORTSPEC int DECL2 _daveSendMessageMPI_IBH(daveConnection * dc, PDU * p);
 EXPORTSPEC int DECL2 _daveGetResponseMPI_IBH(daveConnection *dc);
-EXPORTSPEC int DECL2 _daveInitStepIBH(daveInterface * iface, uc * chal, int cl, us* resp,int rl, uc*b);
+EXPORTSPEC int DECL2 _daveInitStepIBH(daveInterface * iface, unsigned char * chal, int cl, unsigned short* resp,int rl, unsigned char*b);
 
 EXPORTSPEC int DECL2 _daveConnectPLC_IBH(daveConnection*dc);
 EXPORTSPEC int DECL2 _daveDisconnectPLC_IBH(daveConnection*dc);
@@ -1035,7 +1028,7 @@ EXPORTSPEC void DECL2 _daveSendMPIAck2(daveConnection *dc);
 EXPORTSPEC int DECL2 _davePackPDU_PPI(daveConnection * dc,PDU *p);
 EXPORTSPEC void DECL2 _daveSendIBHNetAckPPI(daveConnection * dc);
 EXPORTSPEC int DECL2 _daveListReachablePartnersMPI_IBH(daveInterface *di, char * buf);
-EXPORTSPEC int DECL2 __daveAnalyzePPI(daveConnection * dc, uc sa);
+EXPORTSPEC int DECL2 __daveAnalyzePPI(daveConnection * dc, unsigned char sa);
 EXPORTSPEC int DECL2 _daveExchangePPI_IBH(daveConnection * dc, PDU * p);
 EXPORTSPEC int DECL2 _daveGetResponsePPI_IBH(daveConnection *dc);
 
@@ -1076,7 +1069,7 @@ EXPORTSPEC int DECL2 daveReadPLCTime(daveConnection * dc);
 /*
     set clock to a value given by user:
 */ 
-EXPORTSPEC int DECL2 daveSetPLCTime(daveConnection * dc,uc * ts);
+EXPORTSPEC int DECL2 daveSetPLCTime(daveConnection * dc,unsigned char * ts);
 /*
     set clock to PC system clock:
 */ 
@@ -1084,23 +1077,23 @@ EXPORTSPEC int DECL2 daveSetPLCTimeToSystime(daveConnection * dc);
 /*
     BCD conversions:
 */ 
-EXPORTSPEC uc DECL2 daveToBCD(uc i);
-EXPORTSPEC uc DECL2 daveFromBCD(uc i);
+EXPORTSPEC unsigned char DECL2 daveToBCD(unsigned char i);
+EXPORTSPEC unsigned char DECL2 daveFromBCD(unsigned char i);
 /*
     S5:
 */
 EXPORTSPEC int DECL2 _daveFakeExchangeAS511(daveConnection * dc, PDU * p);
-EXPORTSPEC int DECL2 _daveExchangeAS511(daveConnection * dc, uc * b,int len,int maxLen, int trN);
+EXPORTSPEC int DECL2 _daveExchangeAS511(daveConnection * dc, unsigned char * b,int len,int maxLen, int trN);
 EXPORTSPEC int DECL2 _daveSendMessageAS511(daveConnection * dc, PDU * p);
 EXPORTSPEC int DECL2 _daveConnectPLCAS511(daveConnection * dc);
 EXPORTSPEC int DECL2 _daveDisconnectPLCAS511(daveConnection * dc);
-EXPORTSPEC int DECL2 _daveIsS5BlockArea(uc area);
-EXPORTSPEC int DECL2 _daveReadS5BlockAddress(daveConnection * dc, uc area, uc BlockN, daveS5AreaInfo * ai);
-EXPORTSPEC int DECL2 _daveReadS5ImageAddress(daveConnection * dc, uc area, daveS5AreaInfo * ai);
-EXPORTSPEC int DECL2 _daveIsS5ImageArea(uc area);
-EXPORTSPEC int DECL2 _daveIsS5DBBlockArea(uc area);
-EXPORTSPEC int DECL2 daveReadS5Bytes(daveConnection * dc, uc area, uc BlockN, int offset, int count);
-EXPORTSPEC int DECL2 daveWriteS5Bytes(daveConnection * dc, uc area, uc BlockN, int offset, int count, void * buf);
+EXPORTSPEC int DECL2 _daveIsS5BlockArea(unsigned char area);
+EXPORTSPEC int DECL2 _daveReadS5BlockAddress(daveConnection * dc, unsigned char area, unsigned char BlockN, daveS5AreaInfo * ai);
+EXPORTSPEC int DECL2 _daveReadS5ImageAddress(daveConnection * dc, unsigned char area, daveS5AreaInfo * ai);
+EXPORTSPEC int DECL2 _daveIsS5ImageArea(unsigned char area);
+EXPORTSPEC int DECL2 _daveIsS5DBBlockArea(unsigned char area);
+EXPORTSPEC int DECL2 daveReadS5Bytes(daveConnection * dc, unsigned char area, unsigned char BlockN, int offset, int count);
+EXPORTSPEC int DECL2 daveWriteS5Bytes(daveConnection * dc, unsigned char area, unsigned char BlockN, int offset, int count, void * buf);
 EXPORTSPEC int DECL2 daveStopS5(daveConnection * dc);
 EXPORTSPEC int DECL2 daveStartS5(daveConnection * dc);
 EXPORTSPEC int DECL2 daveGetS5ProgramBlock(daveConnection * dc, int blockType, int number, char* buffer, int * length);
@@ -1108,7 +1101,7 @@ EXPORTSPEC int DECL2 daveGetS5ProgramBlock(daveConnection * dc, int blockType, i
 /*
     MPI version 3:
 */
-EXPORTSPEC int DECL2 _daveSendWithPrefix31(daveConnection * dc, uc *b, int size);
+EXPORTSPEC int DECL2 _daveSendWithPrefix31(daveConnection * dc, unsigned char *b, int size);
 EXPORTSPEC int DECL2 _daveGetResponseMPI3(daveConnection *dc);
 EXPORTSPEC int DECL2 _daveSendMessageMPI3(daveConnection * dc, PDU * p);
 
@@ -1126,10 +1119,10 @@ EXPORTSPEC int DECL2 _daveSendMessageMPI3(daveConnection * dc, PDU * p);
     Prototypes for the functions in S7onlinx.dll:
     They are guessed.
 */
-typedef int (DECL2 * _openFunc) (const uc *);
+typedef int (DECL2 * _openFunc) (const unsigned char *);
 typedef int (DECL2 * _closeFunc) (int);
-typedef int (DECL2 * _sendFunc) (int, us, uc *);
-typedef int (DECL2 * _receiveFunc) (int, us, int *, us, uc *);
+typedef int (DECL2 * _sendFunc) (int, unsigned short, unsigned char *);
+typedef int (DECL2 * _receiveFunc) (int, unsigned short, int *, unsigned short, unsigned char *);
 //typedef int (DECL2 * _SetHWndMsgFunc) (int, int, ULONG);
 //typedef int (DECL2 * _SetHWndFunc) (int, HANDLE);
 typedef int (DECL2 * _get_errnoFunc) (void);
@@ -1154,33 +1147,33 @@ extern _get_errnoFunc SCP_get_errno;
 */
 
 typedef struct {
-    us		unknown [2];
-    uc		headerlength;
-    us		user;
-    uc		allways2;
-    uc		priority;
-    uc		unknown3 [3];
-    uc		field6;
-    uc		field7;
-    us		field8;
-    us		validDataLength;
-    uc          unknown11;
-    us          payloadLength;
-    us		payloadStart;
-    uc		unknown2[12];
-    uc		field10;
-    us		id3;
+    unsigned short		unknown [2];
+    unsigned char		headerlength;
+    unsigned short		user;
+    unsigned char		allways2;
+    unsigned char		priority;
+    unsigned char		unknown3 [3];
+    unsigned char		field6;
+    unsigned char		field7;
+    unsigned short		field8;
+    unsigned short		validDataLength;
+    unsigned char          unknown11;
+    unsigned short          payloadLength;
+    unsigned short		payloadStart;
+    unsigned char		unknown2[12];
+    unsigned char		field10;
+    unsigned short		id3;
     short 	application_block_service;
-    uc		unknown4[2];
-    uc          field13;
-    uc          field11;
-    uc          field12;
-    uc		unknown6[35];
-    uc          payload[520];
+    unsigned char		unknown4[2];
+    unsigned char          field13;
+    unsigned char          field11;
+    unsigned char          field12;
+    unsigned char		unknown6[35];
+    unsigned char          payload[520];
 } S7OexchangeBlock;
 
-EXPORTSPEC int DECL2 _daveCP_send(int fd, int len, uc * reqBlock);
-EXPORTSPEC int DECL2 _daveSCP_send(int fd, uc * reqBlock);
+EXPORTSPEC int DECL2 _daveCP_send(int fd, int len, unsigned char * reqBlock);
+EXPORTSPEC int DECL2 _daveSCP_send(int fd, unsigned char * reqBlock);
 EXPORTSPEC int DECL2 _daveConnectPLCS7online (daveConnection * dc);
 EXPORTSPEC int DECL2 _daveSendMessageS7online(daveConnection * dc, PDU *p);
 EXPORTSPEC int DECL2 _daveDisconnectPLCS7online (daveConnection * dc);
@@ -1193,13 +1186,13 @@ EXPORTSPEC int DECL2 stdwrite(daveInterface * di, char * buffer, int length);
 EXPORTSPEC int DECL2 stdread(daveInterface * di, char * buffer, int length);
 
 EXPORTSPEC int DECL2 _daveInitAdapterNLpro(daveInterface * di);
-EXPORTSPEC int DECL2 _daveInitStepNLpro(daveInterface * iface, int nr, uc* fix, int len, char*caller, uc * buffer);
+EXPORTSPEC int DECL2 _daveInitStepNLpro(daveInterface * iface, int nr, unsigned char* fix, int len, char*caller, unsigned char * buffer);
 EXPORTSPEC int DECL2 _daveConnectPLCNLpro (daveConnection * dc);
 EXPORTSPEC int DECL2 _daveSendMessageNLpro(daveConnection *dc, PDU *p);
 EXPORTSPEC int DECL2 _daveGetResponseNLpro(daveConnection *dc);
 EXPORTSPEC int DECL2 _daveExchangeNLpro(daveConnection * dc, PDU * p);
 EXPORTSPEC int DECL2 _daveSendDialogNLpro(daveConnection * dc, int size);
-EXPORTSPEC int DECL2 _daveSendWithPrefixNLpro(daveConnection * dc, uc * b,int size);
+EXPORTSPEC int DECL2 _daveSendWithPrefixNLpro(daveConnection * dc, unsigned char * b,int size);
 EXPORTSPEC int DECL2 _daveSendWithPrefix2NLpro(daveConnection * dc, int size);
 EXPORTSPEC int DECL2 _daveDisconnectPLCNLpro(daveConnection * dc);
 EXPORTSPEC int DECL2 _daveDisconnectAdapterNLpro(daveInterface * di);
@@ -1217,7 +1210,7 @@ EXPORTSPEC int DECL2 _daveListReachablePartnersNLpro(daveInterface * di, char * 
 /*
     Changes: 
     07/19/04  added the definition of daveExchange().
-    09/09/04  applied patch for variable Profibus speed from Andrew Rostovtsew.
+    09/09/04  applied patch for variable Profibunsigned short speed from Andrew Rostovtsew.
     09/09/04  applied patch from Bryan D. Payne to make this compile under Cygwin and/or newer gcc.
     12/09/04  added daveReadBits(), daveWriteBits()
     12/09/04  added some more comments.
