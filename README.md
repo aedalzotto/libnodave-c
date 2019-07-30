@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/aedalzotto/libnodave-c.svg?branch=master)](https://travis-ci.org/aedalzotto/libnodave-c)
+
 # DISCLAIMER
 
 **Do NOT connect to a PLC unless you are certain it is safe to do so. It is assumed that you are experienced in PLC programming/troubleshooting and that you know EXACTLY what you are doing. PLCs are used to control industrial processes, motors, steam valves, hydraulic presses, etc. You are ABSOLUTELY RESPONSIBLE for ensuring that no one is in danger of being injured or killed because you affected the operation of a running PLC.
